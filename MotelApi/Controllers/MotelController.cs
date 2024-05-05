@@ -121,30 +121,6 @@ namespace MotelApi.Controllers
             });
         }
 
-        [HttpPost("upload")]
-        public ActionResult Upload([FromForm] UploadFile file)
-        {
-            try
-            {
-                if (!Directory.Exists(_webHostEnvironment.WebRootPath + ".\\Images\\"))
-                {
-                    Directory.CreateDirectory(_webHostEnvironment.WebRootPath + ".\\Images\\");
-                }
-                using (FileStream fileStream = System.IO.File.Create(_webHostEnvironment.WebRootPath + ".\\Images\\" + file.File.FileName))
-                {
-                    file.File.CopyTo(fileStream);
-                    fileStream.Flush();
-                    return Ok("\\Images\\" + file.File.FileName);
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-
-            return Ok("");
-        }
-
         [HttpPost("approve")]
         public async Task<ActionResult<ApiResponse<bool>>> ApproveMotel(Guid id)
         {
