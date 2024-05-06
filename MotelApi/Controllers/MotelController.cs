@@ -97,7 +97,7 @@ namespace MotelApi.Controllers
 
             var actual = new MotelResponse();
             actual.Id = result.Id;
-            actual.UserName = request.Name;
+            actual.UserName = request.UserName;
             actual.Descriptions = request.Descriptions;
             actual.Price = (int)request.Price;
             actual.Status = (Common.Status)(int)request.Status;
@@ -110,10 +110,23 @@ namespace MotelApi.Controllers
             });
         }
 
-        [HttpGet]
-        public async Task<ActionResult<ApiResponse<List<MotelResponse>>>> GetMotels()
+        [HttpPost("update")]
+        public async Task<ActionResult<ApiResponse<MotelResponse>>> UpdateMotel([FromForm] MotelModelRequest request)
         {
-            var motels = await _service.GetMotels();
+            var result = await _service.UpdateMotel(request);
+           
+            return Ok(new ApiResponse<Motel>
+            {
+                Data = result,
+                StatusCode = 200,
+                Messages = result == null ? "Update motel fail" : null
+            });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<ApiResponse<List<MotelResponse>>>> GetMotels(string? userName)
+        {
+            var motels = await _service.GetMotels(userName);
             return Ok(new ApiResponse<List<MotelResponse>>
             {
                 Data = motels,
@@ -125,6 +138,17 @@ namespace MotelApi.Controllers
         public async Task<ActionResult<ApiResponse<bool>>> ApproveMotel(Guid id)
         {
             var result = await _service.Approve(id);
+            return Ok(new ApiResponse<bool>
+            {
+                Data = result,
+                StatusCode = 200,
+            });
+        }
+
+        [HttpPost("hired")]
+        public async Task<ActionResult<ApiResponse<bool>>> HireMotel(Guid id)
+        {
+            var result = await _service.Hired(id);
             return Ok(new ApiResponse<bool>
             {
                 Data = result,

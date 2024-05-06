@@ -1,6 +1,22 @@
 {
   "Files": [
     {
+      "Id": "D:\\Code\\WebThueTro\\MotelApi\\MotelApi\\wwwroot\\Images\\ac---0---.png",
+      "PackagePath": "staticwebassets\\Images\\ac---0---.png"
+    },
+    {
+      "Id": "D:\\Code\\WebThueTro\\MotelApi\\MotelApi\\wwwroot\\Images\\ac---1---.png",
+      "PackagePath": "staticwebassets\\Images\\ac---1---.png"
+    },
+    {
+      "Id": "D:\\Code\\WebThueTro\\MotelApi\\MotelApi\\wwwroot\\Images\\ac---2---.png",
+      "PackagePath": "staticwebassets\\Images\\ac---2---.png"
+    },
+    {
+      "Id": "D:\\Code\\WebThueTro\\MotelApi\\MotelApi\\wwwroot\\Images\\ac---3---.png",
+      "PackagePath": "staticwebassets\\Images\\ac---3---.png"
+    },
+    {
       "Id": "D:\\Code\\WebThueTro\\MotelApi\\MotelApi\\wwwroot\\Images\\admin---0---.png",
       "PackagePath": "staticwebassets\\Images\\admin---0---.png"
     },

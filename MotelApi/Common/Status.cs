@@ -4,6 +4,7 @@
     {
         Success,
         Block,
-        Pending
+        Waiting,
+        InProgress
     }
 }

@@ -5,6 +5,8 @@ using MotelApi.Models;
 using MotelApi.Request;
 using MotelApi.Response;
 using MotelApi.Services.IServices;
+using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MotelApi.Services
 {
@@ -33,7 +35,7 @@ namespace MotelApi.Services
             return model;
         }
 
-        public async Task<Image> CreateImage(Image model)
+        public async Task<Models.Image> CreateImage(Models.Image model)
         {
             await _context.Images.AddAsync(model);
             await _context.SaveChangesAsync();
@@ -76,13 +78,13 @@ namespace MotelApi.Services
 
         public async Task<List<Motel>> GetAll()
         {
-            return await _context.Motels.Where(x => x.Status == Common.Status.Pending).ToListAsync();
+            return await _context.Motels.Where(x => x.Status == Common.Status.Waiting).ToListAsync();
         }
 
         public async Task<Motel> GetById(Guid id)
         {
 
-            throw new NotImplementedException();
+           return await _context.Motels.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public Task<Motel> Update(Motel model)
@@ -90,9 +92,9 @@ namespace MotelApi.Services
             throw new NotImplementedException();
         }
 
-        public async Task<List<Image>> GetImages(Guid motelId)
+        public async Task<List<Models.Image>> GetImages(Guid motelId)
         {
-            var result = new List<Image>();
+            var result = new List<Models.Image>();
             var imageMotels = await _context.ImageMotels.Where(x => x.MotelId == motelId).ToListAsync();
             foreach (var item in imageMotels)
             {
@@ -102,12 +104,19 @@ namespace MotelApi.Services
             return result;
         }
 
-        public async Task<List<MotelResponse>> GetMotels()
+        public async Task<List<MotelResponse>> GetMotels(string? userName)
         {
-            var motels = await _context.Motels.ToListAsync();
+            var motels = new List<Motel>();
+            if (userName != null)
+            {
+                motels = await _context.Motels.Where(x=>x.UserName == userName).ToListAsync();
+            }
+            else
+            {
+               motels = await _context.Motels.ToListAsync();
+            }
+            
             var result = _mapper.Map<List<MotelResponse>>(motels);
-
-
 
             foreach (var item in result)
             {
@@ -131,7 +140,7 @@ namespace MotelApi.Services
             return result;
         }
 
-        public async Task<List<Image>> GetImageByUserName(string userName)
+        public async Task<List<Models.Image>> GetImageByUserName(string userName)
         {
             return await _context.Images.Where(x => x.ImageUrl.Contains(userName + "---")).ToListAsync();
         }
@@ -139,7 +148,7 @@ namespace MotelApi.Services
         public async Task<bool> Approve(Guid id)
         {
             var motel = await _context.Motels.FirstOrDefaultAsync(x => x.Id == id);
-            motel.Status = Common.Status.Success;
+            motel.Status = Common.Status.InProgress;
             _context.SaveChanges();
             return motel != null;
         }
@@ -185,6 +194,84 @@ namespace MotelApi.Services
 
             }
             return result;
+        }
+
+        public async Task<Motel> UpdateMotel(MotelModelRequest motelModelRequest)
+        {
+            var motel = await _context.Motels.FirstOrDefaultAsync(x => x.Id == motelModelRequest.Id);
+            motel.UserName = motelModelRequest.UserName;
+            motel.Title = motelModelRequest.Title;
+            motel.Descriptions =   motelModelRequest.Descriptions;
+            motel.Price = motelModelRequest.Price;
+            motel.Status = motelModelRequest.Status;
+            _context.Motels.Update(motel);
+
+            var motelDetail = await _context.MotelDetails.FirstOrDefaultAsync(x => x.MotelId == motel.Id);
+            if(motelDetail != null)
+            {
+                _ = motelDetail.Address == motelModelRequest.Address;
+                motelDetail.Acreage = motelModelRequest.Acreage;
+                motelDetail.City = motelModelRequest.City;
+                motelDetail.NumberBedRoom = motelModelRequest.NumberBedRoom;
+                motelDetail.NumberBathRoom = motelModelRequest.NumberBathRoom;
+                motelDetail.Deposit = motelModelRequest.Deposit;
+            }
+            _context.MotelDetails.Update(motelDetail);
+
+            //check image 
+            if(motelModelRequest.File != null)
+            {
+                var imageMotel = await _context.ImageMotels.FirstOrDefaultAsync(x => x.MotelId == motel.Id);
+                var image = await _context.Images.FirstOrDefaultAsync(x => x.Id == imageMotel.ImageId);
+                StringBuilder fileName = new();
+
+                var imageExist = await GetImageByUserName(motelModelRequest.UserName);
+                if (imageExist.Count() == 0)
+                {
+                    fileName.Append(motelModelRequest.UserName);
+                    fileName.Append("---0---.png");
+                }
+                else
+                {
+                    var number = imageExist.Count();
+                    fileName.Append(motelModelRequest.UserName);
+                    fileName.Append("---");
+                    fileName.Append(number);
+                    fileName.Append("---.png");
+                }
+                try
+                {
+                    if (!Directory.Exists(_webHostEnvironment.WebRootPath + ".\\Images\\"))
+                    {
+                        Directory.CreateDirectory(_webHostEnvironment.WebRootPath + ".\\Images\\");
+                    }
+
+                    using (FileStream fileStream = System.IO.File.Create(_webHostEnvironment.WebRootPath + ".\\Images\\" + fileName))
+                    {
+                        motelModelRequest.File.CopyTo(fileStream);
+                        fileStream.Flush();
+                        image.ImageUrl = "\\Images\\" + fileName;
+                    }
+
+
+                }
+                catch (Exception ex)
+                {
+
+                }
+                _context.Images.Update(image);
+            }
+
+            _context.SaveChanges();
+            return motel;
+        }
+
+        public async Task<bool> Hired(Guid id)
+        {
+            var motel = await _context.Motels.FirstOrDefaultAsync(x => x.Id == id);
+            motel.Status = Common.Status.Success;
+            _context.SaveChanges();
+            return motel != null;
         }
     }
 }
