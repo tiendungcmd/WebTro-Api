@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MotelApi.DBContext.SeedData;
 using MotelApi.Models;
 namespace MotelApi.DBContext
 {
@@ -24,6 +25,9 @@ namespace MotelApi.DBContext
             modelBuilder.Entity<ImageHistory>().HasKey(m => new { m.ImageId, m.HistoryId });
             modelBuilder.Entity<ImageMotel>().HasKey(m => new { m.ImageId, m.MotelId });
             modelBuilder.Entity<UserRole>().HasKey(m => new { m.UserId, m.RoleId });
+            modelBuilder.ApplyConfiguration(new RoleSeedData());
+            modelBuilder.ApplyConfiguration(new UserRoleSeedData());
+            modelBuilder.ApplyConfiguration(new UserSeedData());
         }
     }
 }

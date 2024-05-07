@@ -17,5 +17,7 @@
 
         public Guid? UserDetailId { get; set; }
 
+        public DateTime CreateTime { get; set; }
+
     }
 }

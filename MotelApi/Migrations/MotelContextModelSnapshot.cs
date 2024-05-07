@@ -28,6 +28,9 @@ namespace MotelApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Descriptions")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -110,6 +113,9 @@ namespace MotelApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime?>("CreatedTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Descriptions")
                         .HasColumnType("nvarchar(max)");
 
@@ -180,8 +186,7 @@ namespace MotelApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Descroption")
-                        .IsRequired()
+                    b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoleName")
@@ -191,6 +196,13 @@ namespace MotelApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("47d19a48-cc09-4725-82b0-0e5b74c84634"),
+                            RoleName = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("MotelApi.Models.User", b =>
@@ -198,6 +210,9 @@ namespace MotelApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid?>("HistoryId")
                         .HasColumnType("uniqueidentifier");
@@ -225,6 +240,15 @@ namespace MotelApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("47d19a48-cc09-4725-82b0-0e5b74c84634"),
+                            CreateTime = new DateTime(2024, 5, 7, 3, 27, 34, 499, DateTimeKind.Utc).AddTicks(1222),
+                            PasswordHash = "123",
+                            UserName = "admin"
+                        });
                 });
 
             modelBuilder.Entity("MotelApi.Models.UserDetail", b =>
@@ -261,6 +285,13 @@ namespace MotelApi.Migrations
                     b.HasKey("UserId", "RoleId");
 
                     b.ToTable("UserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("47d19a48-cc09-4725-82b0-0e5b74c84634"),
+                            RoleId = new Guid("47d19a48-cc09-4725-82b0-0e5b74c84634")
+                        });
                 });
 #pragma warning restore 612, 618
         }

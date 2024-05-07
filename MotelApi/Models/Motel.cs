@@ -14,5 +14,7 @@ namespace MotelApi.Models
         public Status? Status { get; set; }
         public string? Title { get; set; }
         public string Reason { get; set; }
+
+        public DateTime? CreatedTime { get; set; }
     }
 }

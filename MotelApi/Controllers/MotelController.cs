@@ -30,6 +30,7 @@ namespace MotelApi.Controllers
             motel.Title = request.Title;
             motel.Rate = request.Rate;
             motel.Reason = "";
+            motel.CreatedTime = DateTime.Now;
             var result = await _service.Create(motel);
 
             var motelDetail = new MotelDetail();

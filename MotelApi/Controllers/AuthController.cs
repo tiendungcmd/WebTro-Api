@@ -26,6 +26,7 @@ namespace MotelApi.Controllers
             user.PasswordHash = request.Password;
             user.Id = Guid.NewGuid();
             user.IsActive = true;
+            user.CreateTime = DateTime.Now;
             var result = await _userService.Create(user);
             return Ok(new ApiResponse<User>
             {

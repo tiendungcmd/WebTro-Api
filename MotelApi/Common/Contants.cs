@@ -16,4 +16,13 @@
             Woman
         }
     }
+    public static class RoleNameContants
+    {
+        public enum RoleName
+        {
+            Admin,
+            User
+        }
+    }
+
 }
