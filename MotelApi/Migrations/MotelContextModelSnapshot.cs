@@ -35,8 +35,15 @@ namespace MotelApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("MotelId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -245,7 +252,7 @@ namespace MotelApi.Migrations
                         new
                         {
                             Id = new Guid("47d19a48-cc09-4725-82b0-0e5b74c84634"),
-                            CreateTime = new DateTime(2024, 5, 7, 3, 27, 34, 499, DateTimeKind.Utc).AddTicks(1222),
+                            CreateTime = new DateTime(2024, 5, 7, 6, 46, 11, 888, DateTimeKind.Utc).AddTicks(7479),
                             PasswordHash = "123",
                             UserName = "admin"
                         });

@@ -84,7 +84,7 @@ namespace MotelApi.Services
         public async Task<Motel> GetById(Guid id)
         {
 
-           return await _context.Motels.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Motels.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public Task<Motel> Update(Motel model)
@@ -109,13 +109,13 @@ namespace MotelApi.Services
             var motels = new List<Motel>();
             if (userName != null)
             {
-                motels = await _context.Motels.Where(x=>x.UserName == userName).ToListAsync();
+                motels = await _context.Motels.Where(x => x.UserName == userName).ToListAsync();
             }
             else
             {
-               motels = await _context.Motels.ToListAsync();
+                motels = await _context.Motels.ToListAsync();
             }
-            
+
             var result = _mapper.Map<List<MotelResponse>>(motels);
 
             foreach (var item in result)
@@ -201,13 +201,13 @@ namespace MotelApi.Services
             var motel = await _context.Motels.FirstOrDefaultAsync(x => x.Id == motelModelRequest.Id);
             motel.UserName = motelModelRequest.UserName;
             motel.Title = motelModelRequest.Title;
-            motel.Descriptions =   motelModelRequest.Descriptions;
+            motel.Descriptions = motelModelRequest.Descriptions;
             motel.Price = motelModelRequest.Price;
             motel.Status = motelModelRequest.Status;
             _context.Motels.Update(motel);
 
             var motelDetail = await _context.MotelDetails.FirstOrDefaultAsync(x => x.MotelId == motel.Id);
-            if(motelDetail != null)
+            if (motelDetail != null)
             {
                 _ = motelDetail.Address == motelModelRequest.Address;
                 motelDetail.Acreage = motelModelRequest.Acreage;
@@ -219,7 +219,7 @@ namespace MotelApi.Services
             _context.MotelDetails.Update(motelDetail);
 
             //check image 
-            if(motelModelRequest.File != null)
+            if (motelModelRequest.File != null)
             {
                 var imageMotel = await _context.ImageMotels.FirstOrDefaultAsync(x => x.MotelId == motel.Id);
                 var image = await _context.Images.FirstOrDefaultAsync(x => x.Id == imageMotel.ImageId);
@@ -272,6 +272,33 @@ namespace MotelApi.Services
             motel.Status = Common.Status.Success;
             _context.SaveChanges();
             return motel != null;
+        }
+
+        public async Task<Comment> SendComment(CommentRequest commentRequest)
+        {
+            var comment = new Comment();
+            comment.Id = Guid.NewGuid();
+            comment.UserName = commentRequest.UserName;
+            comment.Descriptions = commentRequest.Descriptions;
+            comment.CreatedTime = DateTime.Now;
+            comment.UserId = Guid.NewGuid();
+            comment.MotelId = commentRequest.MotelId;
+            await _context.Comments.AddAsync(comment);
+            _context.SaveChanges();
+            return comment;
+        }
+
+        public async Task<List<Comment>> GetCommentByMotelId(Guid id)
+        {
+            return await _context.Comments.Where(x => x.MotelId == id).ToListAsync();
+        }
+
+        public async Task<bool> DeleteComment(Guid id)
+        {
+            var comment = await _context.Comments.FirstOrDefaultAsync(x => x.Id == id);
+            _context.Comments.Remove(comment);
+            _context.SaveChanges();
+            return comment != null;
         }
     }
 }

@@ -17,7 +17,9 @@ namespace MotelApi.Services.IServices
         Task<bool> Reject(MotelReject motelReject);
         Task<MotelDetail> CreateMotelDetails(MotelDetail model);
         Task<MotelResponse> GetMotelById(Guid id);
-
         Task<Motel> UpdateMotel(MotelModelRequest motel);
+        Task<Comment> SendComment(CommentRequest commentRequest);
+        Task<List<Comment>> GetCommentByMotelId(Guid id);
+        Task<bool> DeleteComment(Guid id);
     }
 }

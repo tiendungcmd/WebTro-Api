@@ -46,5 +46,60 @@ namespace MotelApi.Controllers
                 Messages = result == null ? "Login fail" : null
             });
         }
+
+        [HttpGet("profile")]
+        public async Task<ActionResult<UserResponse>> GetProfile(string userName)
+        {
+            var result = await _userService.GetProfile(userName);
+            return Ok(new ApiResponse<UserResponse>
+            {
+                Data = result,
+                StatusCode = 200,
+            });
+        }
+
+        [HttpPost("profile")]
+        public async Task<ActionResult<bool>> UpdateProfile([FromBody] UserRequest request)
+        {
+            var result = await _userService.UpdateProfile(request);
+            return Ok(new ApiResponse<bool>
+            {
+                Data = result,
+                StatusCode = 200,
+            });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<User>>> GetUser()
+        {
+            var result = await _userService.GetUsers();
+            return Ok(new ApiResponse<List<User>>
+            {
+                Data = result,
+                StatusCode = 200,
+            });
+        }
+
+        [HttpPost("lockAccount")]
+        public async Task<ActionResult<bool>> LockUser(Guid id)
+        {
+            var result = await _userService.LockUser(id);
+            return Ok(new ApiResponse<bool>
+            {
+                Data = result,
+                StatusCode = 200,
+            });
+        }
+
+        [HttpPost("resetPassword")]
+        public async Task<ActionResult<bool>> ResetPassword(Guid id)
+        {
+            var result = await _userService.ResetPassword(id);
+            return Ok(new ApiResponse<bool>
+            {
+                Data = result,
+                StatusCode = 200,
+            });
+        }
     }
 }

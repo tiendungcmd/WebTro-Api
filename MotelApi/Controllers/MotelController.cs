@@ -115,7 +115,7 @@ namespace MotelApi.Controllers
         public async Task<ActionResult<ApiResponse<MotelResponse>>> UpdateMotel([FromForm] MotelModelRequest request)
         {
             var result = await _service.UpdateMotel(request);
-           
+
             return Ok(new ApiResponse<Motel>
             {
                 Data = result,
@@ -187,6 +187,37 @@ namespace MotelApi.Controllers
             {
                 Data = result,
                 StatusCode = 200,
+            });
+        }
+
+        [HttpPost("comment")]
+        public async Task<ActionResult<Comment>> SendComment([FromBody] CommentRequest request)
+        {
+            var result = await _service.SendComment(request);
+            return Ok(new ApiResponse<Comment>
+            {
+                Data = result,
+                StatusCode = 200
+            });
+        }
+        [HttpGet("comment")]
+        public async Task<ActionResult<List<Comment>>> GetComment(Guid id)
+        {
+            var result = await _service.GetCommentByMotelId(id);
+            return Ok(new ApiResponse<List<Comment>>
+            {
+                Data = result,
+                StatusCode = 200
+            });
+        }
+        [HttpDelete("comment")]
+        public async Task<ActionResult<bool>> DeleteComment(Guid id)
+        {
+            var result = await _service.DeleteComment(id);
+            return Ok(new ApiResponse<bool>
+            {
+                Data = result,
+                StatusCode = 200
             });
         }
     }

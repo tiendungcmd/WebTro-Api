@@ -9,9 +9,7 @@ namespace MotelApi.DBContext
         {
         }
         public DbSet<Comment> Comments { get; set; }
-        public DbSet<History> Histories { get; set; }
         public DbSet<Image> Images { get; set; }
-        public DbSet<ImageHistory> ImageHistories { get; set; }
         public DbSet<ImageMotel> ImageMotels { get; set; }
         public DbSet<Motel> Motels { get; set; }
         public DbSet<Role> Roles { get; set; }

@@ -16,5 +16,6 @@ namespace MotelApi.Models
         public string Reason { get; set; }
 
         public DateTime? CreatedTime { get; set; }
+      
     }
 }

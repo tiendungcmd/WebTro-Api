@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MotelApi.Migrations
 {
-    public partial class createDb : Migration
+    public partial class createDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,9 @@ namespace MotelApi.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Descriptions = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    MotelId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -183,7 +185,7 @@ namespace MotelApi.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "CreateTime", "HistoryId", "IsActive", "KeyHash", "Name", "PasswordHash", "UserDetailId", "UserName" },
-                values: new object[] { new Guid("47d19a48-cc09-4725-82b0-0e5b74c84634"), new DateTime(2024, 5, 7, 3, 27, 34, 499, DateTimeKind.Utc).AddTicks(1222), null, null, null, null, "123", null, "admin" });
+                values: new object[] { new Guid("47d19a48-cc09-4725-82b0-0e5b74c84634"), new DateTime(2024, 5, 7, 6, 46, 11, 888, DateTimeKind.Utc).AddTicks(7479), null, null, null, null, "123", null, "admin" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
